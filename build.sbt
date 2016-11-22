@@ -8,6 +8,10 @@ libraryDependencies += javaJdbc
 
 scalaVersion := "2.11.7"
 
+val appDependencies = Seq(
+  "ws.securesocial" %% "securesocial" % "2.1.4"
+)
+
 routesGenerator := StaticRoutesGenerator
 
 libraryDependencies ++= Seq(
