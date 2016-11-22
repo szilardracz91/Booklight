@@ -21,6 +21,8 @@ POST    /reg                     controllers.Application.registration()
 
 GET    /addNewUser              controllers.Application.addNewUser()
 
+GET    /writeComment        controllers.Application.writeComment()
+
 GET     /logout                     controllers.Application.logout()
 
 GET     /addNewBook         controllers.Application.addNewBooks()

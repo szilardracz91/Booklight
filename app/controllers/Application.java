@@ -2,6 +2,7 @@ package controllers;
 
 import com.avaje.ebean.Model;
 import models.Book;
+import models.Comment;
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
@@ -53,9 +54,18 @@ public class Application extends Controller {
     }
 
     public static Result addNewBooks() {
-        new Book("Trónok harc", "George R.R Martin", "Epikus fantasy, nem középszerű").save();
-        new Book("Harry Potter és Tűz serlege", "J. K. Rowlings","Varázslatos árvíztűrőtükörfúrógép").save();
-        new Book("Logikai rendszerek tervezése", "Arató Péter","Az ifjúsági irodalom legjava").save();
+        new Book("Trónok harc", "George R.R Martin", "Epikus fantasy, nem középszerű", "drama").save();
+        new Book("Harry Potter és Tűz serlege", "J. K. Rowlings","Varázslatos árvíztűrőtükörfúrógép", "thrill").save();
+        new Book("Logikai rendszerek tervezése", "Arató Péter","Az ifjúsági irodalom legjava", "drama").save();
+        return ok("Some Books added");
+    }
+
+    public static Result writeComment() {
+
+        User user = User.find.byId(session().get("email"));
+        Book book = Book.find.byId(1);
+        Comment com = new Comment(user, book, "this is a shit again");
+        com.save();
         return ok("Some Books added");
     }
 
@@ -106,12 +116,31 @@ public class Application extends Controller {
 
     }
 
+   /* public static class Genre {
+
+        public String genre;
+
+        public String validate() {
+            if (Book. == null) {
+                new User(email, name, password).save();
+            }
+            else return "This email already exists";
+            return null;
+        }
+
+    }*/
+
     public static Result logout() {
         session().clear();
         flash("success", "You've been logged out");
         return redirect(
                 routes.Application.login()
         );
+    }
+
+    public static Result filterWithGenre(){
+        List<Book> books = Book.filteWithGenre("ide jön paraméternek a műfaj");
+        return  ok(toJson(books));
     }
 
     public static Result getBooks(){

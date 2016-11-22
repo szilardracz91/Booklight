@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 public class Rating extends Model {
 
     @Id
-    public Long id;
+    public int id;
 
     @ManyToOne
     public Book book;
@@ -26,8 +26,8 @@ public class Rating extends Model {
 
     }
 
-    public static Finder<String, Rating> find = new Finder<String, Rating>(
-            String.class, Rating.class
+    public static Finder<Integer, Rating> find = new Finder<Integer, Rating>(
+            Integer.class, Rating.class
     );
 
 }
