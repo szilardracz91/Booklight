@@ -20,3 +20,7 @@ POST    /auth                     controllers.Application.authenticate()
 GET    /addNewUser              controllers.Application.addNewUser()
 
 GET     /logout                     controllers.Application.logout()
+
+GET     /addNewBook         controllers.Application.addNewBooks()
+
+GET     /getBooks           controllers.Application.getBooks

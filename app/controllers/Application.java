@@ -1,5 +1,7 @@
 package controllers;
 
+import com.avaje.ebean.Model;
+import models.Book;
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
@@ -7,6 +9,11 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.index;
 import views.html.login;
+
+import java.util.List;
+
+import static play.libs.Json.toJson;
+
 
 
 public class Application extends Controller {
@@ -29,12 +36,16 @@ public class Application extends Controller {
         return ok("csa");
     }
 
+    public static Result addNewBooks() {
+        new Book("Trónok harc", "George R.R Martin", "Epikus fantasy, nem középszerű").save();
+        new Book("Harry Potter és Tűz serlege", "J. K. Rowlings","Varázslatos árvíztűrőtükörfúrógép").save();
+        new Book("Logikai rendszerek tervezése", "Arató Péter","Az ifjúsági irodalom legjava").save();
+        return ok("Some Books added");
+    }
+
     @Security.Authenticated(Secured.class)
     public static Result index() {
-        return ok(index.render(
-                "sziamia",
-                User.find.byId(request().username())
-        ));
+        return ok(index.render("sziamia", User.find.byId(request().username() )));
     }
 
     public static Result login() {
@@ -63,6 +74,16 @@ public class Application extends Controller {
         return redirect(
                 routes.Application.login()
         );
+    }
+
+    public static Result getBooks(){
+        List<Book> books = new Model.Finder(String.class, Book.class).all();
+        return  ok(toJson(books));
+    }
+
+    public static Result getRatings(){
+        List<Book> books = new Model.Finder(String.class, Book.class).all();
+        return  ok(toJson(books));
     }
 
 }
