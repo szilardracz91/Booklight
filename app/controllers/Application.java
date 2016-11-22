@@ -1,6 +1,7 @@
 package controllers;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.databind.JsonNode;
 import models.Book;
 import models.User;
 import play.data.Form;
@@ -86,4 +87,9 @@ public class Application extends Controller {
         return  ok(toJson(books));
     }
 
+    public static Result postRating(){
+        String json = request().body().asText();
+        System.out.println("---------------"+json+"----------------");
+        return  ok();
+    }
 }

@@ -14,8 +14,8 @@ $.ajax({
             {
                 var panel = $('<div class="panel panel-default"></div>').appendTo(bookList);
                 $('<div class="panel-heading"><a href="">'+obj.title+' by: '+obj.author+'</a></div>').appendTo(panel);
-                //$('<input type="range" name="points" min="1" max="5">').appendTo(bookList);
                 var rating = $('<div class="rateit"></div>').appendTo(bookList);
+                rating.bind('rated', function() {postRating(obj.id, rating.rateit('value'))});
                 rating.rateit();
                 $('<p>'+obj.description+'</p>').appendTo(bookList);
                 $('<hr>').appendTo(bookList);
