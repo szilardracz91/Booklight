@@ -14,11 +14,11 @@ $.ajax({
             {
                 var panel = $('<div class="panel panel-default"></div>').appendTo(bookList);
                 $('<div class="panel-heading"><a href="">'+obj.title+' by: '+obj.author+'</a></div>').appendTo(panel);
-
-                $('<div class="rateit"></div>').appendTo(bookList);
+                //$('<input type="range" name="points" min="1" max="5">').appendTo(bookList);
+                var rating = $('<div class="rateit"></div>').appendTo(bookList);
+                rating.rateit();
                 $('<p>'+obj.description+'</p>').appendTo(bookList);
                 $('<hr>').appendTo(bookList);
-
 
             });
         }
