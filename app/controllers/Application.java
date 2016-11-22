@@ -1,8 +1,13 @@
 package controllers;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.databind.JsonNode;
 import models.Book;
+
 import models.Comment;
+
+import models.Rating;
+
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
@@ -154,8 +159,12 @@ public class Application extends Controller {
     }
 
     public static Result postRating(){
-        String json = request().body().asText();
-        System.out.println("---------------"+json+"----------------");
+        JsonNode json = request().body().asJson();
+        int bookId = json.findPath("bookId").intValue();
+        double ratingValue = json.findPath("ratingValue").doubleValue();
+       // Book ratedBook = Book.find.byId(Integer.toString(bookId));
+        User user = User.find.byId(session().get("email"));
+        //new Rating(ratedBook, user, ratingValue).save();
         return  ok();
     }
 }
