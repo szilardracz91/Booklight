@@ -1,6 +1,7 @@
 package controllers;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.databind.JsonNode;
 import models.Book;
 import models.Rating;
 import models.User;
