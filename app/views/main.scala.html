@@ -9,13 +9,16 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        @* Here's where we render the page title `String`. *@
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
         <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-        <script src="@routes.Assets.versioned("javascripts/hello.js")" type="text/javascript"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+        <link href='@routes.Assets.versioned("stylesheets/bootstrap.min.css")' rel="stylesheet">
+        <link href='@routes.Assets.versioned("stylesheets/styles.css")' rel="stylesheet">
     </head>
     <body>
+<<<<<<< HEAD
         <header>
             <a href="@routes.Application.index" id="logo"><span>Zen</span>tasks</a>
             <dl id="user">
@@ -28,5 +31,141 @@
         @* And here's where we render the `Html` object containing
          * the page content. *@
         @content
+=======
+            <!-- begin template -->
+        <div class="navbar navbar-custom navbar-fixed-top" >
+            <div class="navbar-header"><a class="navbar-brand" href="/">Booklight</a>
+                <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" data-target="#collapse1" href="#collapse1">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+            </div>
+            <div class="navbar-collapse collapse" id="collapse1">
+                <ul class="nav navbar-nav">
+                    <li><a href="" data-toggle="modal"  data-target="#createAListModal">Create a new list</a></li>
+                    <li><a href="" data-toggle="modal" data-target="#publishAListModal">Publish an existing list</a></li>
+                    <li>&nbsp;</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container-fluid" id="main">
+            <div class="row">
+
+                <div class="col-xs-3">
+                    <br/>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item active">List books</a>
+                        <a href="#" class="list-group-item">List user favourites</a>
+                        <a href="#" class="list-group-item">Filter by genres</a>
+                    </div>
+                </div>
+                <br/>
+                <div class="col-xs-9" id="left">
+                        <!-- item list -->
+                    @content
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="">Item heading</a></div>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
+                        Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
+                        dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
+                        Aliquam in felis sit amet augue.</p>
+
+                    <hr>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="">Item heading</a></div>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
+                        Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
+                        dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
+                        Aliquam in felis sit amet augue.</p>
+
+                    <hr>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="">Item heading</a></div>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
+                        Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
+                        dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
+                        Aliquam in felis sit amet augue.</p>
+
+                    <hr>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a href="">Item heading</a></div>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
+                        Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
+                        dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
+                        Aliquam in felis sit amet augue.</p>
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="createAListModal" role="dialog">
+            <div class="modal-dialog">
+                    <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Create a new List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Please choose from our books:</strong></p>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item">First item</a>
+                            <a href="#" class="list-group-item">Second item</a>
+                            <a href="#" class="list-group-item">Third item</a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="publishAListModal" role="dialog">
+            <div class="modal-dialog">
+                    <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Publish a List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Please choose from your lists:</strong></p>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item">First item</a>
+                            <a href="#" class="list-group-item">Second item</a>
+                            <a href="#" class="list-group-item">Third item</a>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+            <!-- end template -->
+
+            <!-- script references -->
+        <script src="@routes.Assets.versioned("javascripts/jquery.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/tether.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+>>>>>>> 6c0db3705d55a3a7148c1eb4b1553e28f6839c6d
     </body>
 </html>
