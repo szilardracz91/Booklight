@@ -17,6 +17,8 @@ GET     /                 controllers.Application.index()
 
 POST    /auth                     controllers.Application.authenticate()
 
+POST    /reg                     controllers.Application.registration()
+
 GET    /addNewUser              controllers.Application.addNewUser()
 
 GET     /logout                     controllers.Application.logout()
@@ -24,5 +26,7 @@ GET     /logout                     controllers.Application.logout()
 GET     /addNewBook         controllers.Application.addNewBooks()
 
 GET     /getBooks           controllers.Application.getBooks
+
+GET     /registrate           controllers.Application.registrate()
 
 POST    /postRating         controllers.Application.postRating()

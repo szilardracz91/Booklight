@@ -1,7 +1,6 @@
 package controllers;
 
 import com.avaje.ebean.Model;
-import com.fasterxml.jackson.databind.JsonNode;
 import models.Book;
 import models.User;
 import play.data.Form;
@@ -10,6 +9,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.index;
 import views.html.login;
+import views.html.registrate;
 
 import java.util.List;
 
@@ -30,6 +30,21 @@ public class Application extends Controller {
                     routes.Application.index()
             );
         }
+    }
+
+    public static Result registration() {
+        Form<Registrate> regForm = Form.form(Registrate.class).bindFromRequest();
+        if (regForm.hasErrors()) {
+            return badRequest(registrate.render(regForm));
+        } else {
+            session().clear();
+            session("email", regForm.get().email);
+            return redirect(
+                    routes.Application.index()
+            );
+        }
+
+
     }
 
     public static Result addNewUser() {
@@ -55,6 +70,12 @@ public class Application extends Controller {
         );
     }
 
+    public static Result registrate() {
+        return ok(
+                registrate.render(Form.form(Registrate.class))
+        );
+    }
+
     public static class Login {
 
         public String email;
@@ -64,6 +85,22 @@ public class Application extends Controller {
             if (User.authenticate(email, password) == null) {
                 return "Invalid user or password";
             }
+            return null;
+        }
+
+    }
+
+    public static class Registrate {
+
+        public String email;
+        public String name;
+        public String password;
+
+        public String validate() {
+            if (User.checkEmail(email) == null) {
+                new User(email, name, password).save();
+            }
+            else return "This email already exists";
             return null;
         }
 

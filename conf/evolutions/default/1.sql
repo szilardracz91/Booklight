@@ -4,22 +4,20 @@
 # --- !Ups
 
 create table book (
-  id                            bigint not null,
+  id                            bigint auto_increment not null,
   title                         varchar(255),
   author                        varchar(255),
   description                   varchar(255),
   constraint pk_book primary key (id)
 );
-create sequence book_seq;
 
 create table rating (
-  id                            bigint not null,
+  id                            bigint auto_increment not null,
   book_id                       bigint,
   user_email                    varchar(255),
   value                         double,
   constraint pk_rating primary key (id)
 );
-create sequence rating_seq;
 
 create table user (
   email                         varchar(255) not null,
@@ -37,17 +35,15 @@ create index ix_rating_user_email on rating (user_email);
 
 # --- !Downs
 
-alter table rating drop constraint if exists fk_rating_book_id;
-drop index if exists ix_rating_book_id;
+alter table rating drop foreign key fk_rating_book_id;
+drop index ix_rating_book_id on rating;
 
-alter table rating drop constraint if exists fk_rating_user_email;
-drop index if exists ix_rating_user_email;
+alter table rating drop foreign key fk_rating_user_email;
+drop index ix_rating_user_email on rating;
 
 drop table if exists book;
-drop sequence if exists book_seq;
 
 drop table if exists rating;
-drop sequence if exists rating_seq;
 
 drop table if exists user;
 
