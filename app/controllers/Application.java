@@ -3,10 +3,15 @@ package controllers;
 import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
+
 import models.Book;
 import models.Comment;
 import models.Rating;
 import models.User;
+
+import models.*;
+
+
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -82,11 +87,50 @@ public class Application extends Controller {
         return  ok(toJson(userek));
     }
 
-    public static Result addNewBooks() {
-        new Book("Trónok harc", "George R.R Martin", "Epikus fantasy, nem középszerű", "drama").save();
-        new Book("Harry Potter és Tűz serlege", "J. K. Rowlings","Varázslatos árvíztűrőtükörfúrógép", "thrill").save();
-        new Book("Logikai rendszerek tervezése", "Arató Péter","Az ifjúsági irodalom legjava", "drama").save();
-        return ok("Some Books added");
+    public static Result addInitData() {
+
+        new Genre("fantasy").save();
+        new Genre("classic").save();
+        new Genre("history").save();
+        new Genre("juvenile").save();
+        new Genre("tragedy").save();
+        new Genre("epic").save();
+
+        User userOne = new User("asd@asd.com", "Alice", "secret");
+        userOne.save();
+
+        User userTwo = new User("asasdd@asd.com", "Bob", "secret");
+        userTwo.save();
+
+        User userThee = new User("asasjjbgdd@asd.com", "Lenin", "secret");
+        userThee.save();
+
+
+        Book tr = Book.create("Trónok harca","George R. R. Martin","Epikus fantasy, nem középszerű","fantasy");
+        tr.save();
+        tr.addGenre(tr.id, "epic");
+
+        Book hp = Book.create("Harry Potter és Tűz serlege", "J. K. Rowlings","Varázslatos árvíztűrőtükörfúrógép", "juvenile");
+        hp.save();
+        hp.addGenre(hp.id, "fantasy");
+        hp.addGenre(hp.id, "epic");
+
+        Book lrt = Book.create("Logikai rendszerek tervezése", "Arató Péter","Az ifjúsági irodalom legjava", "classic");
+        lrt.save();
+        lrt.addGenre(lrt.id, "juvenile");
+
+
+        BookList list1 = BookList.create(tr, userOne);
+        list1.status = "published";
+        list1.save();
+        list1.addBook(list1.id, hp.id);
+        list1.addBook(list1.id, lrt.id);
+
+
+        BookList list2 = BookList.create(hp, userTwo);
+        list2.addBook(list2.id, tr.id);
+
+        return ok("Some init data were added");
     }
 
     public static Result writeComment() {
@@ -146,20 +190,6 @@ public class Application extends Controller {
 
     }
 
-   /* public static class Genre {
-
-        public String genre;
-
-        public String validate() {
-            if (Book. == null) {
-                new User(email, name, password).save();
-            }
-            else return "This email already exists";
-            return null;
-        }
-
-    }*/
-
     public static Result logout() {
         session().clear();
         flash("success", "You've been logged out");
@@ -168,10 +198,6 @@ public class Application extends Controller {
         );
     }
 
-    public static Result filterWithGenre(){
-        List<Book> books = Book.filterWithGenre("ide jön paraméternek a műfaj");
-        return  ok(toJson(books));
-    }
 
     public static Result getBooks(){
         List<Book> books = new Model.Finder(String.class, Book.class).all();
@@ -214,20 +240,36 @@ public class Application extends Controller {
         double ratingValue = json.findPath("ratingValue").doubleValue();
         Book ratedBook = Book.find.byId(bookId);
         User user = User.find.byId(session().get("email"));
-
-        ExpressionList<Rating> ratings = Rating.find.where();
-        ratings.add(eq("book", ratedBook));
-        ratings.add(eq("user", user));
-        if (ratings.findList().size() > 0){
-            for(Rating rating : ratings.findList()) { //Just one iteration.
-                rating.value = ratingValue;
-                rating.save();
-            }
+        Rating rating = Rating.findByBookAndUser(ratedBook, user);
+        if (rating != null){
+            rating.value = ratingValue;
+            rating.save();
         }
         else {
             new Rating(ratedBook, user, ratingValue).save();
         }
         return  ok();
+    }
+
+    public static Result getGenres(){
+        List<Genre> genres = new Model.Finder(String.class, Genre.class).all();
+        return  ok(toJson(genres));
+    }
+
+    public static Result getBookByGenres(String genreName){
+        List<Book> booksByGenre = Book.findByGenre(genreName);
+        return  ok(toJson(booksByGenre));
+    }
+
+    public static Result getPublishedBookLists(){
+        List<BookList> bookLists = BookList.findByStatus("published");
+        return  ok(toJson(bookLists));
+    }
+
+    public static Result getBooklistOfUser(){
+        User user = User.find.byId(session().get("email"));
+        List<BookList> bookLists = BookList.findByUser(user);
+        return  ok(toJson(bookLists));
     }
 
 }

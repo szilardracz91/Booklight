@@ -36,7 +36,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="" data-toggle="modal"  data-target="#createAListModal">Create a new list</a></li>
                     <li><a href="" data-toggle="modal" data-target="#publishAListModal">Publish an existing list</a></li>
-                    <li><a href="" data-toggle="modal" data-target="#publishAListModal">List user favourites</a></li>
+                    <li><a href="#" onclick="getPublishedBookLists()">List user favourites</a></li>
                     <li><a href="@routes.Application.logout()" >Logout</a></li>
                     <li>&nbsp;</li>
                 </ul>
@@ -50,13 +50,17 @@
                 <h4>Welcome <span>@user.name</span>!</h4>
                 <br>
             </div>
-
+            <div align="center">
+                <div class="round-box">
+                    <div id="genreList"></div>
+                </div>
+            </div>
+            <br>
             <div class="row">
                 <div class="col-xs-12">
                         <!-- item list -->
                     <div id="bookList"></div>
                 </div>
-
             </div>
         </div>
 
@@ -147,6 +151,7 @@
         <script src="@routes.Assets.versioned("javascripts/getBooks.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/postRating.js")" type="text/javascript"></script>
 
+
         <script>
             var bookCommentId = 0;
                 $('#Comments').on('show.bs.modal', function(e) {
@@ -197,32 +202,7 @@
 
                     });
 
-                    $.ajax({
-                        type: 'GET',
-                        url: "/getComments",
-                        dataType: "json",
-                        success: function (result){
 
-                            var commentList = $('<div id="commentList"></div>');
-                            if( result.length == 0 ) {
-                                commentList.append('<p align="center" style="color:#F0AD4E"><strong>There are no book is the database.</strong></p>');
-                            }
-                            else{
-                                $.each(result, function(i, obj)
-                                {
-                                    var panel = $('<div class="panel panel-default"></div>').appendTo(commentList);
-                                    $('<div class="panel-heading"><a href="">'+obj.user_email+'</a></div>').appendTo(panel);
-
-                                    $('<p>Comment#'+obj.id+': '+obj.text+'</p>').appendTo(commentList);
-
-                                    $('<hr>').appendTo(commentList);
-
-                                });
-                            }
-
-                            $('#commentList').replaceWith(commentList);
-                        }
-                    });
                 });
 
                 function newComment() {
@@ -243,5 +223,9 @@
 
                 }
         </script>
+
+        <script src="@routes.Assets.versioned("javascripts/getGenres.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.versioned("javascripts/getPublishedBookLists.js")" type="text/javascript"></script>
+
     </body>
 </html>
