@@ -18,6 +18,20 @@ create table book_genre (
   constraint pk_book_genre primary key (book_id,genre_name)
 );
 
+create table book_list (
+  id                            integer not null,
+  status                        varchar(255),
+  user_email                    varchar(255),
+  constraint pk_book_list primary key (id)
+);
+create sequence book_list_seq;
+
+create table book_list_book (
+  book_list_id                  integer not null,
+  book_id                       integer not null,
+  constraint pk_book_list_book primary key (book_list_id,book_id)
+);
+
 create table comment (
   id                            integer not null,
   user_email                    varchar(255),
@@ -54,6 +68,15 @@ create index ix_book_genre_book on book_genre (book_id);
 alter table book_genre add constraint fk_book_genre_genre foreign key (genre_name) references genre (name) on delete restrict on update restrict;
 create index ix_book_genre_genre on book_genre (genre_name);
 
+alter table book_list add constraint fk_book_list_user_email foreign key (user_email) references user (email) on delete restrict on update restrict;
+create index ix_book_list_user_email on book_list (user_email);
+
+alter table book_list_book add constraint fk_book_list_book_book_list foreign key (book_list_id) references book_list (id) on delete restrict on update restrict;
+create index ix_book_list_book_book_list on book_list_book (book_list_id);
+
+alter table book_list_book add constraint fk_book_list_book_book foreign key (book_id) references book (id) on delete restrict on update restrict;
+create index ix_book_list_book_book on book_list_book (book_id);
+
 alter table comment add constraint fk_comment_user_email foreign key (user_email) references user (email) on delete restrict on update restrict;
 create index ix_comment_user_email on comment (user_email);
 
@@ -75,6 +98,15 @@ drop index if exists ix_book_genre_book;
 alter table book_genre drop constraint if exists fk_book_genre_genre;
 drop index if exists ix_book_genre_genre;
 
+alter table book_list drop constraint if exists fk_book_list_user_email;
+drop index if exists ix_book_list_user_email;
+
+alter table book_list_book drop constraint if exists fk_book_list_book_book_list;
+drop index if exists ix_book_list_book_book_list;
+
+alter table book_list_book drop constraint if exists fk_book_list_book_book;
+drop index if exists ix_book_list_book_book;
+
 alter table comment drop constraint if exists fk_comment_user_email;
 drop index if exists ix_comment_user_email;
 
@@ -91,6 +123,11 @@ drop table if exists book;
 drop sequence if exists book_seq;
 
 drop table if exists book_genre;
+
+drop table if exists book_list;
+drop sequence if exists book_list_seq;
+
+drop table if exists book_list_book;
 
 drop table if exists comment;
 drop sequence if exists comment_seq;

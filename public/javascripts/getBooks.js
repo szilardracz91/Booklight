@@ -13,7 +13,7 @@ $.ajax({
             $.each(result, function(i, obj)
             {
                 var panel = $('<div class="panel panel-default"></div>').appendTo(bookList);
-                $('<div class="panel-heading"><a href="">'+obj.title+' by: '+obj.author+'</a></div>').appendTo(panel);
+                $('<div class="panel-heading">'+obj.title+' by: '+obj.author+'</div>').appendTo(panel);
                 var rating = $('<div class="rateit" data-rateit-resetable="false" ></div>').appendTo(bookList);
                 rating.bind('rated', function() {postRating(obj.id, rating.rateit('value'))});
                 rating.rateit();

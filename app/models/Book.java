@@ -26,11 +26,11 @@ public class Book extends Model {
     @ManyToMany (cascade = CascadeType.REMOVE)
     public List<Genre> genres = new ArrayList<Genre>();
 
-    public Book(String title, String author, String description, Genre genres){
+    public Book(String title, String author, String description, Genre genre){
         this.title=title;
         this.author=author;
         this.description = description;
-        this.genres.add(genres);
+        this.genres.add(genre);
     }
 
     public static Finder<Integer,Book> find = new Finder<Integer,Book>(

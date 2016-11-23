@@ -57,30 +57,50 @@ public class Application extends Controller {
         return ok("csa");
     }
 
-    public static Result addNewBooks() {
-
+    public static Result addInitData() {
 
         new Genre("fantasy").save();
         new Genre("classic").save();
         new Genre("history").save();
         new Genre("juvenile").save();
+        new Genre("tragedy").save();
         new Genre("epic").save();
 
+        User userOne = new User("asd@asd.com", "Alice", "secret");
+        userOne.save();
 
-        Book.create("Trónok harca","George R. R. Martin","Epikus fantasy, nem középszerű","fantasy");
+        User userTwo = new User("asasdd@asd.com", "Bob", "secret");
+        userTwo.save();
+
+        User userThee = new User("asasjjbgdd@asd.com", "Lenin", "secret");
+        userThee.save();
+
+
+        Book tr = Book.create("Trónok harca","George R. R. Martin","Epikus fantasy, nem középszerű","fantasy");
+        tr.save();
+        tr.addGenre(tr.id, "epic");
 
         Book hp = Book.create("Harry Potter és Tűz serlege", "J. K. Rowlings","Varázslatos árvíztűrőtükörfúrógép", "juvenile");
         hp.save();
         hp.addGenre(hp.id, "fantasy");
         hp.addGenre(hp.id, "epic");
 
-        Book.create("Harry Potter és Tűz serlege", "J. K. Rowlings","Varázslatos árvíztűrőtükörfúrógép", "juvenile").save();
+        Book lrt = Book.create("Logikai rendszerek tervezése", "Arató Péter","Az ifjúsági irodalom legjava", "classic");
+        lrt.save();
+        lrt.addGenre(lrt.id, "juvenile");
 
-        Book.create("Logikai rendszerek tervezése", "Arató Péter","Az ifjúsági irodalom legjava", "classic").save();
+
+        BookList list1 = BookList.create(tr, userOne);
+        list1.status = "published";
+        list1.save();
+        list1.addBook(list1.id, hp.id);
+        list1.addBook(list1.id, lrt.id);
 
 
+        BookList list2 = BookList.create(hp, userTwo);
+        list2.addBook(list2.id, tr.id);
 
-        return ok("Some Books were added");
+        return ok("Some init data were added");
     }
 
     public static Result writeComment() {
@@ -197,5 +217,15 @@ public class Application extends Controller {
         return  ok(toJson(booksByGenre));
     }
 
+    public static Result getPublishedBookLists(){
+        List<BookList> bookLists = BookList.findByStatus("published");
+        return  ok(toJson(bookLists));
+    }
+
+    public static Result getBooklistOfUser(){
+        User user = User.find.byId(session().get("email"));
+        List<BookList> bookLists = BookList.findByUser(user);
+        return  ok(toJson(bookLists));
+    }
 
 }

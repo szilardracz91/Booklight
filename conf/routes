@@ -25,7 +25,7 @@ GET    /writeComment        controllers.Application.writeComment()
 
 GET     /logout                     controllers.Application.logout()
 
-GET     /addNewBook         controllers.Application.addNewBooks()
+GET     /addInitData         controllers.Application.addInitData()
 
 GET     /getBooks           controllers.Application.getBooks()
 
@@ -38,3 +38,7 @@ GET     /getRatings       controllers.Application.getRatings(bookId: Int ?=0)
 GET     /getGenres        controllers.Application.getGenres()
 
 GET     /getBooksByGenres  controllers.Application.getBookByGenres(genreName: String)
+
+GET     /getPublishedBookLists       controllers.Application.getPublishedBookLists()
+
+GET     /getBookListOfUser      controllers.Application.getBooklistOfUser()
