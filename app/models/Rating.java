@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.util.List;
 
 
 @Entity
@@ -32,5 +33,9 @@ public class Rating extends Model {
     public static Finder<Integer, Rating> find = new Finder<Integer, Rating>(
             Integer.class, Rating.class
     );
+
+    public static Rating findByBookAndUser(Book book, User user) {
+        return find.where().eq("book", book).eq("user", user).findUnique();
+    }
 
 }

@@ -8,10 +8,15 @@ create table book (
   title                         varchar(255),
   author                        varchar(255),
   description                   varchar(255),
-  genre                         varchar(255),
   constraint pk_book primary key (id)
 );
 create sequence book_seq;
+
+create table book_genre (
+  book_id                       integer not null,
+  genre_name                    varchar(255) not null,
+  constraint pk_book_genre primary key (book_id,genre_name)
+);
 
 create table comment (
   id                            integer not null,
@@ -21,6 +26,11 @@ create table comment (
   constraint pk_comment primary key (id)
 );
 create sequence comment_seq;
+
+create table genre (
+  name                          varchar(255) not null,
+  constraint pk_genre primary key (name)
+);
 
 create table rating (
   id                            integer not null,
@@ -38,6 +48,12 @@ create table user (
   constraint pk_user primary key (email)
 );
 
+alter table book_genre add constraint fk_book_genre_book foreign key (book_id) references book (id) on delete restrict on update restrict;
+create index ix_book_genre_book on book_genre (book_id);
+
+alter table book_genre add constraint fk_book_genre_genre foreign key (genre_name) references genre (name) on delete restrict on update restrict;
+create index ix_book_genre_genre on book_genre (genre_name);
+
 alter table comment add constraint fk_comment_user_email foreign key (user_email) references user (email) on delete restrict on update restrict;
 create index ix_comment_user_email on comment (user_email);
 
@@ -52,6 +68,12 @@ create index ix_rating_user_email on rating (user_email);
 
 
 # --- !Downs
+
+alter table book_genre drop constraint if exists fk_book_genre_book;
+drop index if exists ix_book_genre_book;
+
+alter table book_genre drop constraint if exists fk_book_genre_genre;
+drop index if exists ix_book_genre_genre;
 
 alter table comment drop constraint if exists fk_comment_user_email;
 drop index if exists ix_comment_user_email;
@@ -68,8 +90,12 @@ drop index if exists ix_rating_user_email;
 drop table if exists book;
 drop sequence if exists book_seq;
 
+drop table if exists book_genre;
+
 drop table if exists comment;
 drop sequence if exists comment_seq;
+
+drop table if exists genre;
 
 drop table if exists rating;
 drop sequence if exists rating_seq;
