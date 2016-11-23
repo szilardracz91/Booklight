@@ -15,26 +15,6 @@ $.ajax({
                 var panel = $('<div class="panel panel-default"></div>').appendTo(bookList);
                 $('<div class="panel-heading"><a href="">'+obj.title+' by: '+obj.author+'</a></div>').appendTo(panel);
                 var rating = $('<div class="rateit" data-rateit-resetable="false" ></div>').appendTo(bookList);
-               /*$.ajax({
-                    type: 'GET',
-                    contentType: 'application/json',
-                    url: "/hasRated",
-                    dataType: "json",
-                    data: {
-                        'bookId':obj.id
-                    },
-                    success: function (result) {
-                        if (result == true){
-
-                        }
-                        else {
-
-                }
-                        console.log(result);
-                        data-rateit-readonly="true"
-                    }
-                });*/
-
                 rating.bind('rated', function() {postRating(obj.id, rating.rateit('value'))});
                 rating.rateit();
                 $.ajax({
@@ -47,8 +27,6 @@ $.ajax({
                     },
                     success: function (result) {
                         rating.rateit('value', result);
-                        console.log(result);
-                        console.log("rating getted");
                     }
                 });
 

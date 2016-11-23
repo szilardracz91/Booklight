@@ -179,21 +179,20 @@ public class Application extends Controller {
         double ratingValue = json.findPath("ratingValue").doubleValue();
         Book ratedBook = Book.find.byId(bookId);
         User user = User.find.byId(session().get("email"));
-        new Rating(ratedBook, user, ratingValue).save();
-        return  ok();
-    }
 
-    public static Result hasRated(int bookId){
-        Book book = Book.find.byId(bookId);
-        User user = User.find.byId(session().get("email"));
         ExpressionList<Rating> ratings = Rating.find.where();
-        ratings.add(eq("book", book));
+        ratings.add(eq("book", ratedBook));
         ratings.add(eq("user", user));
-        boolean hasRated = false;
         if (ratings.findList().size() > 0){
-            hasRated = true;
+            for(Rating rating : ratings.findList()) { //Just one iteration.
+                rating.value = ratingValue;
+                rating.save();
+            }
         }
-        return  ok(toJson(hasRated));
+        else {
+            new Rating(ratedBook, user, ratingValue).save();
+        }
+        return  ok();
     }
 
 }
