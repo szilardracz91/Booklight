@@ -4,11 +4,8 @@ import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Book;
-
 import models.Comment;
-
 import models.Rating;
-
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
@@ -18,11 +15,11 @@ import views.html.index;
 import views.html.login;
 import views.html.registrate;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static play.libs.Json.toJson;
-import com.avaje.ebean.ExpressionList;
 import static com.avaje.ebean.Expr.eq;
+import static play.libs.Json.toJson;
 
 
 
@@ -61,6 +58,30 @@ public class Application extends Controller {
         return ok("csa");
     }
 
+    public static Result getBook(int bookId) {
+        if (bookId == 0) {
+            return badRequest("Wrong video ID");
+        }
+        //System.out.println(bookId);
+        Book book = Book.find.byId(bookId);
+
+        return  ok(toJson(book));
+    }
+
+    public static Result getCommentUsers(int bookId) {
+        if (bookId == 0) {
+            return badRequest("Wrong video ID");
+        }
+        Book book = Book.find.byId(bookId);
+        List<Comment> comments = Comment.find.where().eq("book", book).findList();
+        List<String> userek = new ArrayList<String>();
+        for(Comment comment: comments){
+            userek.add(comment.user.email);
+        }
+
+        return  ok(toJson(userek));
+    }
+
     public static Result addNewBooks() {
         new Book("Trónok harc", "George R.R Martin", "Epikus fantasy, nem középszerű", "drama").save();
         new Book("Harry Potter és Tűz serlege", "J. K. Rowlings","Varázslatos árvíztűrőtükörfúrógép", "thrill").save();
@@ -76,6 +97,7 @@ public class Application extends Controller {
         com.save();
         return ok("Some Books added");
     }
+
 
     @Security.Authenticated(Secured.class)
     public static Result index() {
@@ -171,6 +193,19 @@ public class Application extends Controller {
         }
         sum = sum/itemCount;
         return  ok(toJson(sum));
+    }
+
+    public static Result postComment(){
+        JsonNode json = request().body().asJson();
+        String comment = json.findPath("comment").asText();
+        int bookId = json.findPath("bookId").intValue();
+        Book book = Book.find.byId(bookId);
+        User user = User.find.byId(session().get("email"));
+        new Comment(user, book, comment).save();
+
+
+
+        return  ok();
     }
 
     public static Result postRating(){

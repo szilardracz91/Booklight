@@ -6,6 +6,8 @@
  *@
 @(title: String, user:User)(content: Html)
 
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -43,9 +45,9 @@
 
         <div class="container-fluid" id="main">
 
-            <div align="center">
+            <div align="center" class="userName">
                 <br>
-                <h4>Welcome @user.name!</h4>
+                <h4>Welcome <span>@user.name</span>!</h4>
                 <br>
             </div>
 
@@ -53,11 +55,6 @@
                 <div class="col-xs-12">
                         <!-- item list -->
                     <div id="bookList"></div>
-                        <!-- begin wwww.htmlcommentbox.com -->
-                    <div id="HCB_comment_box"><a href="http://www.htmlcommentbox.com">Comment Form</a> is loading comments...</div>
-                    <link rel="stylesheet" type="text/css" href="//www.htmlcommentbox.com/static/skins/bootstrap/twitter-bootstrap.css?v=0" />
-                    <script type="text/javascript" id="hcb"> /*<!--*/ if(!window.hcb_user){hcb_user={};} (function(){var s=document.createElement("script"), l=hcb_user.PAGE || (""+window.location).replace(/'/g,"%27"), h="//www.htmlcommentbox.com";s.setAttribute("type","text/javascript");s.setAttribute("src", h+"/jread?page="+encodeURIComponent(l).replace("+","%2B")+"&opts=16862&num=10&ts=1479889398514");if (typeof s!="undefined") document.getElementsByTagName("head")[0].appendChild(s);})(); /*-->*/ </script>
-                        <!-- end www.htmlcommentbox.com -->
                 </div>
 
             </div>
@@ -85,6 +82,33 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="Comments"  role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="panel panel-default">
+                    <div class="panel-heading" id ="authorAndTitle"></div>
+                    <p>Genre: <span id="genre"></span></p>
+                    <p><span id="description"></span></p>
+                        <hr>
+                    </div>
+                    <div class="modal-header">
+                    Previous comments:
+                    </div>
+                    <div id="commentList">
+                    </div>
+                    <hr>
+                    <div align="center" id="commentList">
+                        <textarea id="comment" rows="4" cols="50" placeholder="write your comment here..."></textarea>
+                        <button onclick="newComment();">Send</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
 
         <div class="modal fade" id="publishAListModal" role="dialog">
             <div class="modal-dialog">
@@ -122,5 +146,102 @@
         <script src="@routes.Assets.versioned("rateit.js-master/scripts/jquery.rateit.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/getBooks.js")" type="text/javascript"></script>
         <script src="@routes.Assets.versioned("javascripts/postRating.js")" type="text/javascript"></script>
+
+        <script>
+            var bookCommentId = 0;
+                $('#Comments').on('show.bs.modal', function(e) {
+
+                    var bookId = $(e.relatedTarget).data('book-id');
+                    var users ;
+                    $.ajax({
+                        type: 'GET',
+                        contentType: 'application/json',
+                        url: "/getCommentUsers",
+                        dataType: "json",
+                        data: {
+                            'bookId': bookId
+                        },
+                        success: function (result) {
+                            users =  result;
+                            bookCommentId = bookId;
+                        }
+
+
+                    });
+
+                    $.ajax({
+                        type: 'GET',
+                        contentType: 'application/json',
+                        url: "/getBook",
+                        dataType: "json",
+                        data: {
+                            'bookId': bookId
+                        },
+                        success: function (result) {
+                            var authorAndTitle=result.title+ " by: "+result.author;
+                            document.getElementById("authorAndTitle").innerHTML = authorAndTitle;
+                            document.getElementById("genre").innerHTML = result.genre;
+                            document.getElementById("description").innerHTML = result.description;
+                            var commentList = $('<div id="commentList"></div>');
+                            for (var i = 0; i < result.comments.length; i++)
+                            {
+                                $('<p><strong>User: '+users[i]+'</strong></p>').appendTo(commentList);
+
+                                $('<p>Comment#'+(i+1)+': '+result.comments[i].text+'</p>').appendTo(commentList);
+                            }
+
+
+                            $('#commentList').replaceWith(commentList);
+                        }
+
+
+                    });
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/getComments",
+                        dataType: "json",
+                        success: function (result){
+
+                            var commentList = $('<div id="commentList"></div>');
+                            if( result.length == 0 ) {
+                                commentList.append('<p align="center" style="color:#F0AD4E"><strong>There are no book is the database.</strong></p>');
+                            }
+                            else{
+                                $.each(result, function(i, obj)
+                                {
+                                    var panel = $('<div class="panel panel-default"></div>').appendTo(commentList);
+                                    $('<div class="panel-heading"><a href="">'+obj.user_email+'</a></div>').appendTo(panel);
+
+                                    $('<p>Comment#'+obj.id+': '+obj.text+'</p>').appendTo(commentList);
+
+                                    $('<hr>').appendTo(commentList);
+
+                                });
+                            }
+
+                            $('#commentList').replaceWith(commentList);
+                        }
+                    });
+                });
+
+                function newComment() {
+                    var comment = document.getElementById("comment").value;
+                    $.ajax({
+                        type: 'POST',
+                        contentType: 'application/json',
+                        url: "/postComment",
+                        dataType: "text",
+                        data: JSON.stringify({
+                            'comment':comment,
+                            'bookId': bookCommentId
+                        }),
+                        success: function () {
+                            console.log("OK");
+                        }
+                    });
+
+                }
+        </script>
     </body>
 </html>

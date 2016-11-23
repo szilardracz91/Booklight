@@ -35,10 +35,13 @@ $.ajax({
                 $('<p>Genre :'+obj.genre+'</p>').appendTo(bookList);
 
                 $('<p>'+obj.description+'</p>').appendTo(bookList);
+                $('<p><a href="#Comments" data-toggle="modal" data-book-id='+obj.id+'>Comment</a></p>').appendTo(bookList);
+
                 $('<hr>').appendTo(bookList);
 
             });
         }
+
         $('#bookList').replaceWith(bookList);
     }
 });

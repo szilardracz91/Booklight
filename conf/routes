@@ -34,3 +34,9 @@ GET     /registrate           controllers.Application.registrate()
 POST    /postRating         controllers.Application.postRating()
 
 GET     /getRatings       controllers.Application.getRatings(bookId: Int ?=0)
+
+GET    /getBook             controllers.Application.getBook(bookId: Int ?=0)
+
+GET    /getCommentUsers             controllers.Application.getCommentUsers(bookId: Int ?=0)
+
+POST   /postComment         controllers.Application.postComment()
