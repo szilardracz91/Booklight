@@ -1,5 +1,6 @@
 package controllers;
 
+import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Book;
@@ -20,6 +21,8 @@ import views.html.registrate;
 import java.util.List;
 
 import static play.libs.Json.toJson;
+import com.avaje.ebean.ExpressionList;
+import static com.avaje.ebean.Expr.eq;
 
 
 
@@ -144,7 +147,7 @@ public class Application extends Controller {
     }
 
     public static Result filterWithGenre(){
-        List<Book> books = Book.filteWithGenre("ide jön paraméternek a műfaj");
+        List<Book> books = Book.filterWithGenre("ide jön paraméternek a műfaj");
         return  ok(toJson(books));
     }
 
@@ -153,18 +156,44 @@ public class Application extends Controller {
         return  ok(toJson(books));
     }
 
-    public static Result getRatings(){
-        List<Book> books = new Model.Finder(String.class, Book.class).all();
-        return  ok(toJson(books));
+    public static Result getRatings(int bookId){
+        if (bookId == 0) {
+            return badRequest("Wrong video ID");
+        }
+        //System.out.println(bookId);
+        Book book = Book.find.byId(bookId);
+        List<Rating> ratings = Rating.find.where().eq("book", book).findList();
+
+        double sum = 0;
+        int itemCount = ratings.size();
+        for(Rating rating : ratings) {
+            sum+=rating.value;
+        }
+        sum = sum/itemCount;
+        return  ok(toJson(sum));
     }
 
     public static Result postRating(){
         JsonNode json = request().body().asJson();
         int bookId = json.findPath("bookId").intValue();
         double ratingValue = json.findPath("ratingValue").doubleValue();
-       // Book ratedBook = Book.find.byId(Integer.toString(bookId));
+        Book ratedBook = Book.find.byId(bookId);
         User user = User.find.byId(session().get("email"));
-        //new Rating(ratedBook, user, ratingValue).save();
+        new Rating(ratedBook, user, ratingValue).save();
         return  ok();
     }
+
+    public static Result hasRated(int bookId){
+        Book book = Book.find.byId(bookId);
+        User user = User.find.byId(session().get("email"));
+        ExpressionList<Rating> ratings = Rating.find.where();
+        ratings.add(eq("book", book));
+        ratings.add(eq("user", user));
+        boolean hasRated = false;
+        if (ratings.findList().size() > 0){
+            hasRated = true;
+        }
+        return  ok(toJson(hasRated));
+    }
+
 }

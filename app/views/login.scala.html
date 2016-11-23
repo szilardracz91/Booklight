@@ -1,37 +1,49 @@
 @(form: Form[Application.Login])
 <html>
     <head>
-        <title>Zentasks</title>
+        <title>Booklight</title>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.versioned("stylesheets/login.css")">
+        <link href='@routes.Assets.versioned("stylesheets/bootstrap.min.css")' rel="stylesheet">
+        <link href='@routes.Assets.versioned("stylesheets/styles.css")' rel="stylesheet">
+        <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.versioned("stylesheets/booklight.css")">
     </head>
-    <body>
-        <header>
-            <a href="@routes.Application.index" id="logo"><span>Zen</span>tasks</a>
-        </header>
+    <body background="@routes.Assets.versioned("images/background.jpg")">
+        <div class="row" align="center">
 
-        @helper.form(routes.Application.authenticate) {
-            <h1>Sign in</h1>
-            @if(form.hasGlobalErrors) {
-                <p class="error">
-                @form.globalError.message
-                </p>
-            }
-            @if(flash.contains("success")) {
-                <p class="success">
-                @flash.get("success")
-                </p>
-            }
-            <p>
-                <input type="email" name="email" placeholder="Email" value="@form("email").value">
-            </p>
-            <p>
-                <input type="password" name="password" placeholder="Password">
-            </p>
-            <p>
-                <button type="submit">Login</button>
-            </p>
-        }
+            <div class="col-xs-4"></div>
+            <div class="col-xs-4">
+                <div class="round-box">
+                    <h3><strong>Welcome to Booklight!</strong></h3>
+                    <br>
+                    @helper.form(routes.Application.authenticate) {
+
+                        @if(form.hasGlobalErrors) {
+                            <p class="error">
+                            @form.globalError.message
+                            </p>
+                        }
+                        @if(flash.contains("success")) {
+                            <p class="success">
+                            @flash.get("success")
+                            </p>
+                        }
+                        <p>
+                            <input type="email" name="email" placeholder="Email" value="@form("email").value">
+                        </p>
+                        <p>
+                            <input type="password" name="password" placeholder="Password">
+                        </p>
+                        <p>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </p>
+                    }
+                    <p>You don't have an account? Register <a href="@routes.Application.registrate()">here</a>.</p>
+                </div>
+
+
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
 
     </body>
 </html>

@@ -36,7 +36,7 @@ public class Book extends Model {
             Integer.class, Book.class
     );
 
-    public static List<Book> filteWithGenre(String genre) {
+    public static List<Book> filterWithGenre(String genre) {
         return find.where().eq("email", genre).findList();
     }
 }

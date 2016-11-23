@@ -27,8 +27,12 @@ GET     /logout                     controllers.Application.logout()
 
 GET     /addNewBook         controllers.Application.addNewBooks()
 
-GET     /getBooks           controllers.Application.getBooks
+GET     /getBooks           controllers.Application.getBooks()
 
 GET     /registrate           controllers.Application.registrate()
 
 POST    /postRating         controllers.Application.postRating()
+
+GET     /getRatings       controllers.Application.getRatings(bookId: Int ?=0)
+
+GET     /hasRated         controllers.Application.hasRated(bookId: Int ?=0)
