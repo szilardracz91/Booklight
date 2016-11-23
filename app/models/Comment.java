@@ -12,11 +12,9 @@ public class Comment extends Model {
     public int id;
 
     @ManyToOne
-    @JsonBackReference
     public User user;
 
     @ManyToOne
-    @JsonBackReference
     public Book book;
 
     public String text;

@@ -10,6 +10,14 @@ padding-left: 25px;
 box-sizing: border-box;
 }
 
+
+.box{
+    padding-top: 25px;
+    padding-right: 25px;
+    padding-bottom: 25px;
+    padding-left: 25px;
+    box-sizing: border-box;
+}
 body{
     background-repeat: no-repeat;
     background-size: cover;

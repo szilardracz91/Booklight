@@ -17,18 +17,10 @@ public class User extends Model {
     public String name;
     public String password;
 
-    @OneToMany(mappedBy="user")
-    @JsonManagedReference
-    public List<Comment> comments = new ArrayList<Comment>();
-
     public User(String email, String name, String password) {
         this.email = email;
         this.name = name;
         this.password = password;
-    }
-
-    public void addComment(Comment comment){
-        comments.add(comment);
     }
 
     public static Finder<String,User> find = new Finder<String,User>(

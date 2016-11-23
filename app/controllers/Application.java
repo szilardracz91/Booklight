@@ -55,36 +55,6 @@ public class Application extends Controller {
             );
         }
 
-
-    }
-
-    public static Result addNewUser() {
-        new User("leskoBandi@gmail.com", "Bob", "secret").save();
-        return ok("csa");
-    }
-
-    public static Result getBook(int bookId) {
-        if (bookId == 0) {
-            return badRequest("Wrong video ID");
-        }
-        //System.out.println(bookId);
-        Book book = Book.find.byId(bookId);
-
-        return  ok(toJson(book));
-    }
-
-    public static Result getCommentUsers(int bookId) {
-        if (bookId == 0) {
-            return badRequest("Wrong video ID");
-        }
-        Book book = Book.find.byId(bookId);
-        List<Comment> comments = Comment.find.where().eq("book", book).findList();
-        List<String> userek = new ArrayList<String>();
-        for(Comment comment: comments){
-            userek.add(comment.user.email);
-        }
-
-        return  ok(toJson(userek));
     }
 
     public static Result addInitData() {
@@ -132,16 +102,6 @@ public class Application extends Controller {
 
         return ok("Some init data were added");
     }
-
-    public static Result writeComment() {
-
-        User user = User.find.byId(session().get("email"));
-        Book book = Book.find.byId(1);
-        Comment com = new Comment(user, book, "this is a shit again");
-        com.save();
-        return ok("Some Books added");
-    }
-
 
     @Security.Authenticated(Secured.class)
     public static Result index() {
@@ -206,7 +166,7 @@ public class Application extends Controller {
 
     public static Result getRatings(int bookId){
         if (bookId == 0) {
-            return badRequest("Wrong video ID");
+            return badRequest();
         }
         //System.out.println(bookId);
         Book book = Book.find.byId(bookId);
@@ -219,19 +179,6 @@ public class Application extends Controller {
         }
         sum = sum/itemCount;
         return  ok(toJson(sum));
-    }
-
-    public static Result postComment(){
-        JsonNode json = request().body().asJson();
-        String comment = json.findPath("comment").asText();
-        int bookId = json.findPath("bookId").intValue();
-        Book book = Book.find.byId(bookId);
-        User user = User.find.byId(session().get("email"));
-        new Comment(user, book, comment).save();
-
-
-
-        return  ok();
     }
 
     public static Result postRating(){
@@ -271,5 +218,44 @@ public class Application extends Controller {
         List<BookList> bookLists = BookList.findByUser(user);
         return  ok(toJson(bookLists));
     }
+
+    public static Result getComments(int bookId) {
+        if (bookId == 0) {
+            return badRequest();
+        }
+        Book book = Book.find.byId(bookId);
+        List<Comment> comments = Comment.find.where().eq("book", book).findList();
+        return  ok(toJson(comments));
+    }
+
+
+    public static Result getBook(int bookId) {
+        if (bookId == 0) {
+            return badRequest();
+        }
+        Book book = Book.find.byId(bookId);
+        return  ok(toJson(book));
+    }
+
+
+    public static Result postComment(){
+        JsonNode json = request().body().asJson();
+        String comment = json.findPath("comment").asText();
+        int bookId = json.findPath("bookId").intValue();
+        Book book = Book.find.byId(bookId);
+        User user = User.find.byId(session().get("email"));
+        new Comment(user, book, comment).save();
+        return  ok();
+    }
+    public static Result getUser() {
+        User user = User.find.byId(session().get("email"));
+        return  ok(toJson(user));
+    }
+
+
+
+
+
+
 
 }

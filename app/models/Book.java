@@ -19,10 +19,6 @@ public class Book extends Model {
     public String author;
     public String description;
 
-    @OneToMany
-    @JsonManagedReference
-    public List<Comment> comments = new ArrayList<Comment>();
-
     @ManyToMany (cascade = CascadeType.REMOVE)
     public List<Genre> genres = new ArrayList<Genre>();
 

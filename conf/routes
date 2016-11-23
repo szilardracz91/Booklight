@@ -19,10 +19,6 @@ POST    /auth                     controllers.Application.authenticate()
 
 POST    /reg                     controllers.Application.registration()
 
-GET    /addNewUser              controllers.Application.addNewUser()
-
-GET    /writeComment        controllers.Application.writeComment()
-
 GET     /logout                     controllers.Application.logout()
 
 GET     /addInitData         controllers.Application.addInitData()
@@ -35,10 +31,9 @@ POST    /postRating         controllers.Application.postRating()
 
 GET     /getRatings       controllers.Application.getRatings(bookId: Int ?=0)
 
-
 GET    /getBook             controllers.Application.getBook(bookId: Int ?=0)
 
-GET    /getCommentUsers             controllers.Application.getCommentUsers(bookId: Int ?=0)
+GET    /getComments             controllers.Application.getComments(bookId: Int ?=0)
 
 POST   /postComment         controllers.Application.postComment()
 
@@ -49,4 +44,6 @@ GET     /getBooksByGenres  controllers.Application.getBookByGenres(genreName: St
 GET     /getPublishedBookLists       controllers.Application.getPublishedBookLists()
 
 GET     /getBookListOfUser      controllers.Application.getBooklistOfUser()
+
+GET     /getUser                controllers.Application.getUser()
 
