@@ -24,7 +24,6 @@ public class Comment extends Model {
     public String text;
 
     public Comment(User user, Book book, String text){
-        this.id=id;
         this.user=user;
         this.book=book;
         this.text=text;

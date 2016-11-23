@@ -13,11 +13,27 @@ $.ajax({
             $.each(result, function(i, obj)
             {
                 var panel = $('<div class="panel panel-default"></div>').appendTo(bookList);
-                $('<div class="panel-heading"><a href="">'+obj.title+' by: '+obj.author+'<br><i> genre: '+obj.genre+
-                '</i></a></div>').appendTo(panel);
-                var rating = $('<div class="rateit"></div>').appendTo(bookList);
+                $('<div class="panel-heading"><a href="">'+obj.title+' by: '+obj.author+'</a></div>').appendTo(panel);
+                var rating = $('<div class="rateit" data-rateit-resetable="false" ></div>').appendTo(bookList);
                 rating.bind('rated', function() {postRating(obj.id, rating.rateit('value'))});
                 rating.rateit();
+                $.ajax({
+                    type: 'GET',
+                    contentType: 'application/json',
+                    url: "/getRatings",
+                    dataType: "json",
+                    data: {
+                        'bookId':obj.id
+                    },
+                    success: function (result) {
+                        rating.rateit('value', result);
+                    }
+                });
+
+
+
+                $('<p>Genre :'+obj.genre+'</p>').appendTo(bookList);
+
                 $('<p>'+obj.description+'</p>').appendTo(bookList);
                 $('<hr>').appendTo(bookList);
 

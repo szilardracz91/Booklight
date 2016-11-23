@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,8 +15,10 @@ public class Rating extends Model {
     public int id;
 
     @ManyToOne
+    @JsonBackReference
     public Book book;
     @ManyToOne
+    @JsonBackReference
     public User user;
     public double value;
 
