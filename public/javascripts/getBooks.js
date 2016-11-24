@@ -43,8 +43,6 @@ $.ajax({
 
 
                 $('<p>'+obj.description+'</p>').appendTo(box);
-
-                console.log(obj.id);
                 $('<p><a href="#Comments" data-toggle="modal"  onclick="getComments('+obj.id+')">Comment</a></p>').appendTo(box);
 
                 $('<hr>').appendTo(box);

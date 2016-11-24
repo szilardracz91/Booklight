@@ -6,8 +6,6 @@ function getPublishedBookLists() {
         url: "/getPublishedBookLists",
         dataType: "json",
         success: function (result){
-            console.log(result);
-
             var publishedListOfBooks = $('<div id="bookList"></div>');
 
             $.each(result, function(i, obj){

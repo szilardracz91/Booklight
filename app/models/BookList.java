@@ -22,24 +22,23 @@ public class BookList extends Model {
     @ManyToOne
     public User user;
 
-    public BookList(Book book, User user){
+    public BookList(User user){
         this.user = user;
         this.status = "private";
-        this.books.add(book);
     }
 
     public static Finder<Integer,BookList> find = new Finder<Integer,BookList>(
             Integer.class, BookList.class
     );
-    public static BookList create(Book book, User user) {
-        BookList bookList = new BookList(book, user);
+    public static BookList create(User user) {
+        BookList bookList = new BookList(user);
         bookList.save();
         Ebean.saveManyToManyAssociations(bookList, "books");
         return bookList;
     }
 
-    public static void addBook(int booklistId, int bookId) {
-        BookList bookList = BookList.find.setId(booklistId).fetch("books", "id").findUnique();
+    public static void addBook(int bookListId, int bookId) {
+        BookList bookList = BookList.find.setId(bookListId).fetch("books", "id").findUnique();
         bookList.books.add(Book.find.ref(bookId));
         Ebean.saveManyToManyAssociations(bookList, "books");
     }

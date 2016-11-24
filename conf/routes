@@ -47,3 +47,5 @@ GET     /getBookListOfUser      controllers.Application.getBooklistOfUser()
 
 GET     /getUser                controllers.Application.getUser()
 
+POST    /postBookList           controllers.Application.postBookList()
+

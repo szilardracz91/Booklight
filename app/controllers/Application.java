@@ -90,14 +90,14 @@ public class Application extends Controller {
         lrt.addGenre(lrt.id, "juvenile");
 
 
-        BookList list1 = BookList.create(tr, userOne);
+        BookList list1 = BookList.create(userOne);
         list1.status = "published";
         list1.save();
         list1.addBook(list1.id, hp.id);
         list1.addBook(list1.id, lrt.id);
 
 
-        BookList list2 = BookList.create(hp, userTwo);
+        BookList list2 = BookList.create(userTwo);
         list2.addBook(list2.id, tr.id);
 
         return ok("Some init data were added");
@@ -204,6 +204,9 @@ public class Application extends Controller {
     }
 
     public static Result getBookByGenres(String genreName){
+        if (genreName == null) {
+            return badRequest();
+        }
         List<Book> booksByGenre = Book.findByGenre(genreName);
         return  ok(toJson(booksByGenre));
     }
@@ -252,7 +255,20 @@ public class Application extends Controller {
         return  ok(toJson(user));
     }
 
+    public static Result postBookList(){
+        User user = User.find.byId(session().get("email"));
+        JsonNode json = request().body().asJson();
+        BookList newBookList = BookList.create(user);
 
+        for (JsonNode selectedBook : json.withArray("selectedBooks")) {
+            String bookIdAsAString = selectedBook.asText();
+            int bookId = Integer.parseInt(bookIdAsAString);
+            Book book = Book.find.byId(bookId);
+            newBookList.addBook(newBookList.id, book.id);
+
+        }
+        return  ok();
+    }
 
 
 
