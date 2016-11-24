@@ -7,8 +7,8 @@ $.ajax({
         var bookList = $('<div id="bookList"></div>');
 
         if( result.length == 0 ) {
-            box.append('<div align="center"><i style="color:#F0AD4E" class="fa fa-frown-o fa-5x" aria-hidden="true"></i>');
-            box.append('<p align="center" style="color:#F0AD4E"><strong>There are no book in the database.</strong></p>');
+            bookList.append('<div align="center"><i style="color:#F0AD4E" class="fa fa-frown-o fa-5x" aria-hidden="true"></i>');
+            bookList.append('<p align="center" style="color:#F0AD4E"><strong>There are no book in the database.</strong></p>');
         }
         else{
             $.each(result, function(i, obj)
