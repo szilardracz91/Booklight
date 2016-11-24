@@ -13,11 +13,26 @@ function getBooksForAList(){
             }
             else {
                 $.each(result, function (i, book) {
-                    $('<a href="#" class="list-group-item">'+book.title+'</a>').appendTo(bookListForPublish);
+                    $('<a href="#" class="list-group-item" id="listItem'+i+'" onclick="changeToSelected(id)">'+book.title+'</a>').appendTo(bookListForPublish);
                 });
             }
             $('#bookListForPublish').replaceWith(bookListForPublish);
         }
     });
+
+}
+
+
+function changeToSelected(id)
+{
+    $('#'+id+'').addClass('active');
+    $('#'+id+'').attr("onclick","changeToUnSelected(id)");
+}
+
+function changeToUnSelected(id)
+{
+
+   $('#'+id+'').removeClass('active');
+   $('#'+id+'').attr("onclick","changeToSelected(id)");
 
 }
