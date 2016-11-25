@@ -55,4 +55,11 @@ public class BookList extends Model {
                 .findList();
     }
 
+    public static List<BookList> findUserPrivates(User user) {
+        return find.where()
+                .eq("user", user)
+                .eq("status", "private")
+                .findList();
+    }
+
 }

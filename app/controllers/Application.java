@@ -1,17 +1,8 @@
 package controllers;
 
-import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
-
-import models.Book;
-import models.Comment;
-import models.Rating;
-import models.User;
-
 import models.*;
-
-
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -20,10 +11,8 @@ import views.html.index;
 import views.html.login;
 import views.html.registrate;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.avaje.ebean.Expr.eq;
 import static play.libs.Json.toJson;
 
 
@@ -222,6 +211,12 @@ public class Application extends Controller {
         return  ok(toJson(bookLists));
     }
 
+    public static Result getPrivateBooklistOfUser(){
+        User user = User.find.byId(session().get("email"));
+        List<BookList> bookLists = BookList.findUserPrivates(user);
+        return  ok(toJson(bookLists));
+    }
+
     public static Result getComments(int bookId) {
         if (bookId == 0) {
             return badRequest();
@@ -270,7 +265,14 @@ public class Application extends Controller {
         return  ok();
     }
 
-
+    public static Result postPublishedList(){
+        JsonNode json = request().body().asJson();
+        int listId = json.findPath("listId").asInt();
+        BookList bookList = BookList.find.byId(listId);
+        bookList.status="published";
+        bookList.save();
+        return  ok();
+    }
 
 
 

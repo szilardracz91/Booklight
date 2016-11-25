@@ -45,7 +45,11 @@ GET     /getPublishedBookLists       controllers.Application.getPublishedBookLis
 
 GET     /getBookListOfUser      controllers.Application.getBooklistOfUser()
 
+GET     /getPrivateBooklistOfUser      controllers.Application.getPrivateBooklistOfUser()
+
 GET     /getUser                controllers.Application.getUser()
+
+POST   /postPublishedList         controllers.Application.postPublishedList()
 
 POST    /postBookList           controllers.Application.postBookList()
 
