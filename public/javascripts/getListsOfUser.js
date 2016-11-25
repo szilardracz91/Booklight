@@ -1,4 +1,3 @@
-
 function getListsOfUser() {
 
     $.ajax({
@@ -16,7 +15,7 @@ function getListsOfUser() {
             else {
                 var counter = 1;
                 $.each(result, function(i, obj){
-                    var listGroupItem = $('<a href="##" class="list-group-item" id="list'+obj.id+'" onclick="changeListToSelected(id)">'+counter+'</a>');
+                    var listGroupItem = $('<a href="#" class="list-group-item" id="list'+obj.id+'" onclick="postPublishedList(id)">'+counter+'</a>');
                     var box = $('<div class="box"></div>').appendTo(listGroupItem);
                     $('<p><strong>My favourites: </strong></p>').appendTo(box);
                     $.each(obj.books, function(i, book){
@@ -35,29 +34,24 @@ function getListsOfUser() {
 
 }
 
-
-function changeListToSelected(id)
-{
-    $('#'+id+'').hide();
-    console.log(id);
-    var number = id.replace(/[^0-9]/g, '');
-    console.log(id);
-    postPublishedList(number);
-}
-
 function postPublishedList(id){
+
+        var idAsNumber = id.replace(/[^0-9]/g, '');
         $.ajax({
             type: 'POST',
             contentType: 'application/json',
             url: "/postPublishedList",
             dataType: "text",
             data: JSON.stringify({
-                'listId':id
+                'listId':idAsNumber
             }),
             success: function () {
+                var successMessage = $('<div id='+id+'></div>')
+                successMessage.append('<div align="center"><i style="color:#5CB85C" class="fa fa-check-circle-o fa-5x" aria-hidden="true"></i></div><br/>')
+                successMessage.append('<p style="color:#5CB85C" align="center"><strong>You have successfully published a book list.</strong></p> ');
+                $('#'+id+'').replaceWith(successMessage);
             }
         });
-
 }
 
 

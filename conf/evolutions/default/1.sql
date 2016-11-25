@@ -4,12 +4,13 @@
 # --- !Ups
 
 create table book (
-  id                            integer auto_increment not null,
+  id                            integer not null,
   title                         varchar(255),
   author                        varchar(255),
   description                   varchar(255),
   constraint pk_book primary key (id)
 );
+create sequence book_seq;
 
 create table book_genre (
   book_id                       integer not null,
@@ -18,11 +19,12 @@ create table book_genre (
 );
 
 create table book_list (
-  id                            integer auto_increment not null,
+  id                            integer not null,
   status                        varchar(255),
   user_email                    varchar(255),
   constraint pk_book_list primary key (id)
 );
+create sequence book_list_seq;
 
 create table book_list_book (
   book_list_id                  integer not null,
@@ -31,12 +33,13 @@ create table book_list_book (
 );
 
 create table comment (
-  id                            integer auto_increment not null,
+  id                            integer not null,
   user_email                    varchar(255),
   book_id                       integer,
   text                          varchar(255),
   constraint pk_comment primary key (id)
 );
+create sequence comment_seq;
 
 create table genre (
   name                          varchar(255) not null,
@@ -44,12 +47,13 @@ create table genre (
 );
 
 create table rating (
-  id                            integer auto_increment not null,
+  id                            integer not null,
   book_id                       integer,
   user_email                    varchar(255),
   value                         double,
   constraint pk_rating primary key (id)
 );
+create sequence rating_seq;
 
 create table user (
   email                         varchar(255) not null,
@@ -88,46 +92,50 @@ create index ix_rating_user_email on rating (user_email);
 
 # --- !Downs
 
-alter table book_genre drop foreign key fk_book_genre_book;
-drop index ix_book_genre_book on book_genre;
+alter table book_genre drop constraint if exists fk_book_genre_book;
+drop index if exists ix_book_genre_book;
 
-alter table book_genre drop foreign key fk_book_genre_genre;
-drop index ix_book_genre_genre on book_genre;
+alter table book_genre drop constraint if exists fk_book_genre_genre;
+drop index if exists ix_book_genre_genre;
 
-alter table book_list drop foreign key fk_book_list_user_email;
-drop index ix_book_list_user_email on book_list;
+alter table book_list drop constraint if exists fk_book_list_user_email;
+drop index if exists ix_book_list_user_email;
 
-alter table book_list_book drop foreign key fk_book_list_book_book_list;
-drop index ix_book_list_book_book_list on book_list_book;
+alter table book_list_book drop constraint if exists fk_book_list_book_book_list;
+drop index if exists ix_book_list_book_book_list;
 
-alter table book_list_book drop foreign key fk_book_list_book_book;
-drop index ix_book_list_book_book on book_list_book;
+alter table book_list_book drop constraint if exists fk_book_list_book_book;
+drop index if exists ix_book_list_book_book;
 
-alter table comment drop foreign key fk_comment_user_email;
-drop index ix_comment_user_email on comment;
+alter table comment drop constraint if exists fk_comment_user_email;
+drop index if exists ix_comment_user_email;
 
-alter table comment drop foreign key fk_comment_book_id;
-drop index ix_comment_book_id on comment;
+alter table comment drop constraint if exists fk_comment_book_id;
+drop index if exists ix_comment_book_id;
 
-alter table rating drop foreign key fk_rating_book_id;
-drop index ix_rating_book_id on rating;
+alter table rating drop constraint if exists fk_rating_book_id;
+drop index if exists ix_rating_book_id;
 
-alter table rating drop foreign key fk_rating_user_email;
-drop index ix_rating_user_email on rating;
+alter table rating drop constraint if exists fk_rating_user_email;
+drop index if exists ix_rating_user_email;
 
 drop table if exists book;
+drop sequence if exists book_seq;
 
 drop table if exists book_genre;
 
 drop table if exists book_list;
+drop sequence if exists book_list_seq;
 
 drop table if exists book_list_book;
 
 drop table if exists comment;
+drop sequence if exists comment_seq;
 
 drop table if exists genre;
 
 drop table if exists rating;
+drop sequence if exists rating_seq;
 
 drop table if exists user;
 
