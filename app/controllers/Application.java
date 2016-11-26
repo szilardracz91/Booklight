@@ -94,7 +94,7 @@ public class Application extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result index() {
-        return ok(index.render("sziamia", User.find.byId(request().username() )));
+        return ok(index.render("welcome", User.find.byId(request().username() )));
     }
 
     public static Result login() {
